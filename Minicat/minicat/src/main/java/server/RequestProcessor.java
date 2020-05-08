@@ -3,31 +3,32 @@ package server;
 import lombok.AllArgsConstructor;
 
 import java.io.InputStream;
+import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.Map;
+import java.util.Objects;
 
 @AllArgsConstructor
 public class RequestProcessor extends Thread {
 
-    private Socket socket;
-    private Map<String, HttpServlet> servletMap;
+    private ServerSocket serverSocket;
+    private Mapper mapper;
 
     @Override
     public void run() {
-        try {
+        try (Socket socket = serverSocket.accept()) {
             InputStream inputStream = socket.getInputStream();
             // 封装Request对象和Response对象
             Request request = new Request(inputStream);
             Response response = new Response(socket.getOutputStream());
+            Wrapper wrapper = mapper.getWrapper(request);
             // 静态资源处理
-            if (servletMap.get(request.getUrl()) == null) {
+            if (Objects.isNull(wrapper)) {
                 response.outputHtml(request.getUrl());
-            } else {
-                // 动态资源servlet请求
-                HttpServlet httpServlet = servletMap.get(request.getUrl());
-                httpServlet.service(request, response);
+                return;
             }
-            socket.close();
+            // 动态资源servlet请求
+            HttpServlet httpServlet = wrapper.getServlet();
+            httpServlet.service(request, response);
         } catch (Exception e) {
             e.printStackTrace();
         }

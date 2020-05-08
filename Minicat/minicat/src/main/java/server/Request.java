@@ -13,8 +13,10 @@ import java.io.InputStream;
 @NoArgsConstructor
 public class Request {
 
-    private String method; // 请求方式，比如GET/POST
+    private String host;
+    private String context;
     private String url;  // 例如 /,/index.html
+    private String method; // 请求方式，比如GET/POST
     private InputStream inputStream;  // 输入流，其他属性从输入流中解析出来
 
     /**
@@ -35,14 +37,21 @@ public class Request {
 
         String inputStr = new String(bytes);
         // 获取第一行请求头信息
-        String firstLineStr = inputStr.split("\\n")[0];  // GET / HTTP/1.1
-
+        String[] lines = inputStr.split("\r\n");
+        String firstLineStr = lines[0];  // GET /demo1/lagou HTTP/1.1
+        String secondLineStr = lines[1];  // Host: localhost:8080
+        this.host = secondLineStr.replace("Host: ", "").split(":")[0];
         String[] strings = firstLineStr.split(" ");
-
         this.method = strings[0];
-        this.url = strings[1];
-        System.out.println("=====>>method:" + method);
+        String substring = strings[1].substring(1);
+        int i = substring.indexOf("/");
+        this.context = substring.substring(0, i);
+        this.url = substring.substring(i);
+
+        System.out.println("=====>>host:" + host);
+        System.out.println("=====>>context:" + context);
         System.out.println("=====>>url:" + url);
+        System.out.println("=====>>method:" + method);
     }
 
 }

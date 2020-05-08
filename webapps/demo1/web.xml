@@ -2,7 +2,7 @@
 <web-app>
     <servlet>
         <servlet-name>lagou</servlet-name>
-        <servlet-class>server.LagouServlet</servlet-class>
+        <servlet-class>servlet.LagouServlet</servlet-class>
     </servlet>
 
 
