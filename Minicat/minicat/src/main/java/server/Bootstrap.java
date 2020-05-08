@@ -12,6 +12,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.ServerSocket;
+import java.net.Socket;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.Arrays;
@@ -81,7 +82,8 @@ public class Bootstrap {
         System.out.println("=====>>>Minicat start on port：" + port);
         // 多线程改造（使用线程池）
         while (true) {
-            RequestProcessor requestProcessor = new RequestProcessor(serverSocket, mapper);
+            Socket socket = serverSocket.accept();
+            RequestProcessor requestProcessor = new RequestProcessor(socket, mapper);
             threadPoolExecutor.execute(requestProcessor);
         }
     }

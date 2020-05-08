@@ -10,12 +10,12 @@ import java.util.Objects;
 @AllArgsConstructor
 public class RequestProcessor extends Thread {
 
-    private ServerSocket serverSocket;
+    private Socket socket;
     private Mapper mapper;
 
     @Override
     public void run() {
-        try (Socket socket = serverSocket.accept()) {
+        try {
             InputStream inputStream = socket.getInputStream();
             // 封装Request对象和Response对象
             Request request = new Request(inputStream);
@@ -24,11 +24,13 @@ public class RequestProcessor extends Thread {
             // 静态资源处理
             if (Objects.isNull(wrapper)) {
                 response.outputHtml(request.getUrl());
+                socket.close();
                 return;
             }
             // 动态资源servlet请求
             HttpServlet httpServlet = wrapper.getServlet();
             httpServlet.service(request, response);
+            socket.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
