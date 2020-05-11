@@ -6,11 +6,11 @@
 
 
 
-
-
 ## 简述Tomcat体系结构
 
-![https://github.com/bobcheng568/Minicat/blob/master/Tomcat%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E5%9B%BE.png](https://github.com/bobcheng568/Minicat/blob/master/Tomcat%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E5%9B%BE.png)
+**如果图片看不到，可以直接去看上面网盘链接里面文档**
+
+![https://github.com/bobcheng568/Minicat/tree/master/Minicat/minicat/src/main/resources/static/Tomcat体系结构图.png](https://github.com/bobcheng568/Minicat/tree/master/Minicat/minicat/src/main/resources/static/Tomcat体系结构图.png)
 
 
 从本质上讲，Tomcat是一个servlet/JSP容器。
